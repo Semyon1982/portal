@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Антоновская СОШ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #A8E4A0 0%, #D8E8D8 50%, #F5F6F5 100%);
+            color: #333333;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .app-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 3px 5px -1px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+        }
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .app-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 20px -4px rgba(0, 0, 0, 0.15), 0 8px 8px -4px rgba(0, 0, 0, 0.08);
+        }
+        @media (min-width: 768px) {
+            .app-icon {
+                width: 64px;
+                height: 64px;
+                border-radius: 16px;
+                margin-bottom: 16px;
+            }
+            .app-icon:hover {
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            }
+        }
+        .category-btn {
+            background-color: #ffffff;
+            color: #333333;
+            transition: all 0.3s ease;
+        }
+        .category-btn.active {
+            background-color: #2f855a;
+            color: #ffffff;
+            transform: scale(1.05);
+        }
+        .category-btn:not(.active):hover {
+            background-color: #e6fffa;
+            color: #2f855a;
+        }
+        .app-card {
+            width: 160px;
+            height: 256px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        @media (min-width: 768px) {
+            .app-card {
+                width: 224px;
+                height: 320px;
+            }
+        }
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #2f855a, #4fb3bf);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(47, 133, 90, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(47, 133, 90, 0.6);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            color: #4b5563;
+        }
+        .header-bg {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .footer-bg {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .text-dark {
+            color: #333333;
+        }
+        .text-secondary {
+            color: #4b5563;
+        }
+        .text-accent {
+            color: #2f855a;
+        }
+        .click-scale {
+            transition: transform 0.1s ease;
+        }
+        .click-scale:active {
+            transform: scale(0.9);
+        }
+        .nav-item.active {
+            background-color: #2f855a;
+            color: #ffffff;
+        }
+        .nav-item:hover:not(.active) {
+            background-color: #e6fffa;
+            color: #2f855a;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header-bg backdrop-blur-md sticky top-0 z-50 border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/logo.png" alt="Логотип Антоновской СОШ" class="logo">
+                    <h1 class="text-2xl font-bold text-dark">Антоновская СОШ</h1>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <nav class="flex space-x-6">
+                        <a href="index.html" class="text-dark hover:text-accent font-medium">Главная</a>
+                        <a href="info.html" class="text-dark hover:text-accent font-medium">О школе</a>
+                        <a href="contact.html" class="text-dark hover:text-accent font-medium">Контакты</a>
+                    </nav>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden md:block">
+                        <svg class="search-icon absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Поиск сервисов..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent bg-white/80 text-dark placeholder-gray-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-4">
+            <div class="relative">
+                <svg class="search-icon absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="mobileSearch" placeholder="Поиск сервисов..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent bg-white/80 text-dark placeholder-gray-500">
+            </div>
+        </div>
+    </header>
+
+    <!-- Categories -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-4">
+                <button data-category="all" class="category-btn active px-6 py-2 rounded-full font-medium transition-colors">Все сервисы</button>
+                <button data-category="education" class="category-btn px-6 py-2 rounded-full font-medium transition-colors">Образование</button>
+                <button data-category="social" class="category-btn px-6 py-2 rounded-full font-medium transition-colors">Соцсети</button>
+                <button data-category="services" class="category-btn px-6 py-2 rounded-full font-medium transition-colors">Сервисы</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apps Grid -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                Школьные сервисы
+            </h3>
+            <div id="appsGrid" class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+                <!-- Apps will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-yellow-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-yellow-600 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2 text-dark">Всегда доступно</h4>
+                    <p class="text-secondary">Все сервисы доступны 24/7 для учеников и родителей</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-green-600 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2 text-dark">Безопасность</h4>
+                    <p class="text-secondary">Защита персональных данных и безопасные соединения</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-400/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-mobile-alt text-blue-600 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-2 text-dark">Мобильный доступ</h4>
+                    <p class="text-secondary">Удобный интерфейс для всех устройств</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 z-50">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-around">
+                <a href="index.html" class="nav-item active flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-sm text-dark">Главная</span>
+                </a>
+                <a href="announcements.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-bullhorn text-lg"></i>
+                    <span class="text-sm text-dark">Объявления</span>
+                </a>
+                <a href="info.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-info-circle text-lg"></i>
+                    <span class="text-sm text-dark">О школе</span>
+                </a>
+                <a href="contact.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-address-book text-lg"></i>
+                    <span class="text-sm text-dark">Контакты</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer-bg backdrop-blur-sm py-12 border-t mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4 text-dark">Антоновская СОШ</h5>
+                    <p class="text-secondary">Единый портал школьных сервисов для учеников, учителей и родителей.</p>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Категории</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-accent">Образование</a></li>
+                        <li><a href="#" class="hover:text-accent">Соцсети</a></li>
+                        <li><a href="#" class="hover:text-accent">Госуслуги</a></li>
+                        <li><a href="#" class="hover:text-accent">Полезные ссылки</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Контакты</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li>Адрес: Нюрбинский район, с.Антоновка, ул.Чусовского 6</li>
+                        <li>Телефон: +7 (41134) 3-36-11</li>
+                        <li>Email: antonovkaschool@mail.ru</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Социальные сети</h6>
+                    <div class="flex space-x-4">
+                        <a href="https://vk.com/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/vk.png" alt="VK" class="w-6 h-6">
+                        </a>
+                        <a href="https://t.me/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/telegram.png" alt="Telegram" class="w-6 h-6">
+                        </a>
+                        <a href="https://youtube.com/@antonovkaschool" class="text-secondary hover:text-red-600">
+                            <img src="images/youtube.png" alt="YouTube" class="w-6 h-6">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-8 pt-8 text-center text-secondary">
+                <p>&copy; 2025 Антоновская СОШ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Apps data
+        const apps = [
+            {
+                id: 'raspisanie',
+                name: 'Расписание',
+                category: 'education',
+                icon: 'images/raspisanie.png',
+                iconColor: '#ffffff',
+                description: 'Просмотр расписания уроков',
+                url: 'schedule.html',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'vk',
+                name: 'VK Группа',
+                category: 'social',
+                icon: 'images/vk.png',
+                iconColor: '#ffffff',
+                description: 'Официальная группа школы ВКонтакте',
+                url: 'https://vk.com/antonovkaschool',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'nedelniy',
+                name: 'Недельный план',
+                category: 'education',
+                icon: 'images/nedelniy.png',
+                iconColor: '#ffffff',
+                description: 'План работы на неделю',
+                url: 'https://docs.google.com/spreadsheets/d/1EbienUINaSft_DQobkxBI8fCSr_6hug2cTXIEevnLCQ/pubhtml?widget=true&headers=false',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'telegram',
+                name: 'Telegram',
+                category: 'social',
+                icon: 'images/telegram.png',
+                iconColor: '#ffffff',
+                description: 'Официальный Telegram канал',
+                url: 'telegram.html',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'youtube',
+                name: 'YouTube',
+                category: 'social',
+                icon: 'images/youtube.png',
+                iconColor: '#ffffff',
+                description: 'Видеоматериалы школы',
+                url: 'https://www.youtube.com/@antonovkaschool',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'site',
+                name: 'Официальный сайт',
+                category: 'services',
+                icon: 'images/site.png',
+                iconColor: '#ffffff',
+                description: 'Сайт школы',
+                url: 'https://nyr-ants.obr.sakha.gov.ru/',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'sferum',
+                name: 'Сферум',
+                category: 'education',
+                icon: 'images/sferum.png',
+                iconColor: '#ffffff',
+                description: 'Платформа Сферум',
+                url: 'https://sferum.ru/?p=dashboard&schoolId=205303400',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'uno',
+                name: 'МКУ УОНР НЮРБА',
+                category: 'education',
+                icon: 'images/uno.jpg',
+                iconColor: '#ffffff',
+                description: 'Управление УО НЮРБА',
+                url: 'https://uuonyurba.ru/',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'gosuslugi',
+                name: 'Госуслуги',
+                category: 'services',
+                icon: 'images/gosuslugi.png',
+                iconColor: '#ffffff',
+                description: 'Портал Госуслуг',
+                url: 'https://www.gosuslugi.ru/help/faq/school/22',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'prognoz',
+                name: 'Прогноз погоды',
+                category: 'services',
+                icon: 'images/prognoz.png',
+                iconColor: '#ffffff',
+                description: 'Погода в Нюрбе',
+                url: 'https://m.rp5.ru/Погода_в_Нюрбе',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'sgo',
+                name: 'СГО',
+                category: 'education',
+                icon: 'images/sgo.png',
+                iconColor: '#ffffff',
+                description: 'Сетевой Город. Образование',
+                url: 'https://sgo.e-yakutia.ru/',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'gto',
+                name: 'ГТО',
+                category: 'education',
+                icon: 'images/gto.png',
+                iconColor: '#ffffff',
+                description: 'Готов к труду и обороне',
+                url: 'gto.html',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'poputka',
+                name: 'Попутка',
+                category: 'social',
+                icon: 'images/poputka.png',
+                iconColor: '#ffffff',
+                description: 'Бот для поиска попутчиков',
+                url: 'https://t.me/poputka_NRB_bot',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'afisha',
+                name: 'Афиша',
+                category: 'services',
+                icon: 'images/afisha.png',
+                iconColor: '#ffffff',
+                description: 'Кинотеатр "Юнион"',
+                url: 'https://kino.nrbr.ru/',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'mastera',
+                name: 'Мастера вкуса',
+                category: 'services',
+                icon: 'images/mastera.png',
+                iconColor: '#ffffff',
+                description: 'Меню и заказы',
+                url: 'https://bit.ly/mastera-vkusa-menu-tg',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'ogninyurba',
+                name: 'ОГНИ Нюрбы',
+                category: 'education',
+                icon: 'images/ogninyurba.png',
+                iconColor: '#ffffff',
+                description: 'Образовательный центр',
+                url: 'https://xn--90adptbcs3gya.xn--p1ai/',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'dussh',
+                name: 'ДЮСШ',
+                category: 'education',
+                icon: 'images/dussh.png',
+                iconColor: '#ffffff',
+                description: 'Детско-юношеская спортивная школа',
+                url: 'https://dussh-nyurba.ru/',
+                buttonText: 'Перейти'
+            },
+            {
+                id: 'radio',
+                name: 'Радио',
+                category: 'social',
+                icon: 'images/radio.jpg',
+                iconColor: '#ffffff',
+                description: 'Школьное радио',
+                url: 'radio.html',
+                buttonText: 'Перейти'
+            }
+        ];
+
+        // State
+        let selectedCategory = 'all';
+        let searchTerm = '';
+
+        // DOM Elements
+        const appsGrid = document.getElementById('appsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const mobileSearch = document.getElementById('mobileSearch');
+        const categoryButtons = document.querySelectorAll('.category-btn');
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderApps();
+        });
+
+        // Render apps
+        function renderApps() {
+            const filteredApps = apps.filter(app => {
+                const matchesCategory = selectedCategory === 'all' || app.category === selectedCategory;
+                const matchesSearch = app.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                    app.description.toLowerCase().includes(searchTerm.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredApps.length === 0) {
+                appsGrid.innerHTML = '<p class="col-span-full text-center text-secondary text-lg">Сервисы не найдены</p>';
+                return;
+            }
+
+            appsGrid.innerHTML = filteredApps.map(app => `
+                <div class="app-card bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all border flex flex-col justify-between">
+                    <div class="p-4 md:p-6 text-center flex flex-col items-center">
+                        <div class="app-icon" style="background-color: ${app.iconColor}">
+                            <img src="${app.icon}" alt="${app.name}">
+                        </div>
+                        <h4 class="text-lg md:text-xl font-bold text-dark mb-2 md:mb-4">${app.name}</h4>
+                        <p class="text-xs md:text-sm text-secondary mb-2 md:mb-4 line-clamp-2">${app.description}</p>
+                    </div>
+                    <div class="p-4 md:p-6 pt-0 md:pt-0 text-center">
+                        <a href="${app.url}" target="_blank" class="btn-primary text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm md:text-base transition-all inline-block mt-2 md:mt-4">
+                            ${app.buttonText}
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Category filter
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    btn.classList.add('bg-white', 'text-dark');
+                });
+                
+                this.classList.add('active');
+                this.classList.remove('bg-white', 'text-dark');
+                
+                selectedCategory = this.dataset.category;
+                renderApps();
+            });
+        });
+
+        // Search functionality
+        function handleSearch() {
+            const term = searchInput.value.trim() || mobileSearch.value.trim();
+            searchTerm = term;
+            renderApps();
+        }
+
+        searchInput.addEventListener('input', handleSearch);
+        mobileSearch.addEventListener('input', handleSearch);
+
+        // Handle app clicks
+        document.addEventListener('click', function(e) {
+            const appLink = e.target.closest('a');
+            if (appLink && appLink.href) {
+                console.log(`Переход к: ${appLink.href}`);
+            }
+        });
+
+        // Close with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Close any modals if needed
+            }
+        });
+    </script>
+</body>
+</html>

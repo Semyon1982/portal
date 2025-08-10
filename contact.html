@@ -1,0 +1,241 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - Антоновская СОШ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #A8E4A0 0%, #D8E8D8 50%, #F5F6F5 100%);
+            color: #333333;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .text-dark {
+            color: #333333;
+        }
+        .text-secondary {
+            color: #4b5563;
+        }
+        .text-accent {
+            color: #2f855a;
+        }
+        .header-bg {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .footer-bg {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .click-scale {
+            transition: transform 0.1s ease;
+        }
+        .click-scale:active {
+            transform: scale(0.9);
+        }
+        .nav-item.active {
+            background-color: #2f855a;
+            color: #ffffff;
+        }
+        .nav-item:hover:not(.active) {
+            background-color: #e6fffa;
+            color: #2f855a;
+        }
+        .contact-item {
+            transition: background-color 0.3s ease;
+        }
+        .contact-item:hover {
+            background-color: #e6fffa;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header-bg backdrop-blur-md sticky top-0 z-50 border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/logo.png" alt="Логотип Антоновской СОШ" class="logo">
+                    <h1 class="text-2xl font-bold text-dark">Антоновская СОШ</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-dark hover:text-accent font-medium">Главная</a>
+                    <a href="info.html" class="text-dark hover:text-accent font-medium">О школе</a>
+                    <a href="contact.html" class="text-dark hover:text-accent font-medium">Контакты</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 flex-grow">
+        <h2 class="text-3xl font-bold text-dark mb-8">Контакты</h2>
+        <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 text-secondary">
+            <!-- Address -->
+            <div class="contact-item flex items-center space-x-4 p-4 rounded-lg mb-4">
+                <i class="fas fa-map-marker-alt text-accent text-xl"></i>
+                <div class="flex-grow">
+                    <p class="font-semibold text-dark">Адрес</p>
+                    <p>Нюрбинский район, с.Антоновка, ул.Чусовского 6</p>
+                </div>
+                <a href="https://yandex.ru/maps/?ll=118.397180,63.289150&z=15&pt=118.397180,63.289150,pm2rdm" target="_blank" class="click-scale">
+                    <i class="fas fa-external-link-alt text-accent text-lg"></i>
+                </a>
+            </div>
+
+            <!-- Phone -->
+            <div class="contact-item flex items-center space-x-4 p-4 rounded-lg mb-4">
+                <i class="fas fa-phone text-accent text-xl"></i>
+                <div class="flex-grow">
+                    <p class="font-semibold text-dark">Телефон</p>
+                    <p>+7 (41134) 3-36-11</p>
+                </div>
+                <a href="tel:+74113433611" class="click-scale">
+                    <i class="fas fa-phone text-accent text-lg"></i>
+                </a>
+            </div>
+
+            <!-- Email -->
+            <div class="contact-item flex items-center space-x-4 p-4 rounded-lg mb-4">
+                <i class="fas fa-envelope text-accent text-xl"></i>
+                <div class="flex-grow">
+                    <p class="font-semibold text-dark">Email</p>
+                    <p>antonovkaschool@mail.ru</p>
+                </div>
+                <a href="mailto:antonovkaschool@mail.ru" class="click-scale">
+                    <i class="fas fa-envelope text-accent text-lg"></i>
+                </a>
+            </div>
+
+            <!-- Map -->
+            <div class="mt-8">
+                <h3 class="text-xl font-semibold text-dark mb-4">Карта</h3>
+                <iframe src="https://yandex.ru/map-widget/v1/?ll=118.397180,63.289150&z=15&pt=118.397180,63.289150,pm2rdm" width="100%" height="400" frameborder="0" allowfullscreen="true" style="border-radius: 8px;"></iframe>
+            </div>
+
+            <!-- Author Credit -->
+            <div class="mt-8 text-center">
+                <p class="text-secondary">Разработано: <a href="mailto:online@newrba.ru" class="text-accent hover:underline click-scale">online@newrba.ru</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 z-50">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-around">
+                <a href="index.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-sm text-dark">Главная</span>
+                </a>
+                <a href="announcements.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-bullhorn text-lg"></i>
+                    <span class="text-sm text-dark">Объявления</span>
+                </a>
+                <a href="info.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-info-circle text-lg"></i>
+                    <span class="text-sm text-dark">О школе</span>
+                </a>
+                <a href="contact.html" class="nav-item active flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-address-book text-lg"></i>
+                    <span class="text-sm text-dark">Контакты</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer-bg backdrop-blur-sm py-12 border-t mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4 text-dark">Антоновская СОШ</h5>
+                    <p class="text-secondary">Единый портал школьных сервисов для учеников, учителей и родителей.</p>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Категории</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-accent">Образование</a></li>
+                        <li><a href="#" class="hover:text-accent">Соцсети</a></li>
+                        <li><a href="#" class="hover:text-accent">Госуслуги</a></li>
+                        <li><a href="#" class="hover:text-accent">Полезные ссылки</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Контакты</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li>Адрес: Нюрбинский район, с.Антоновка, ул.Чусовского 6</li>
+                        <li>Телефон: +7 (41134) 3-36-11</li>
+                        <li>Email: antonovkaschool@mail.ru</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Социальные сети</h6>
+                    <div class="flex space-x-4">
+                        <a href="https://vk.com/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/vk.png" alt="VK" class="w-6 h-6">
+                        </a>
+                        <a href="https://t.me/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/telegram.png" alt="Telegram" class="w-6 h-6">
+                        </a>
+                        <a href="https://youtube.com/@antonovkaschool" class="text-secondary hover:text-red-600">
+                            <img src="images/youtube.png" alt="YouTube" class="w-6 h-6">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-8 pt-8 text-center text-secondary">
+                <p>&copy; 2024 Антоновская СОШ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

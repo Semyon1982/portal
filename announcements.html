@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Объявления - Антоновская СОШ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #A8E4A0 0%, #D8E8D8 50%, #F5F6F5 100%);
+            color: #333333;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .announcement-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        .announcement-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+        .header-bg {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .footer-bg {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .text-dark {
+            color: #333333;
+        }
+        .text-secondary {
+            color: #4b5563;
+        }
+        .text-accent {
+            color: #2f855a;
+        }
+        .click-scale {
+            transition: transform 0.1s ease;
+        }
+        .click-scale:active {
+            transform: scale(0.9);
+        }
+        .nav-item.active {
+            background-color: #2f855a;
+            color: #ffffff;
+        }
+        .nav-item:hover:not(.active) {
+            background-color: #e6fffa;
+            color: #2f855a;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header-bg backdrop-blur-md sticky top-0 z-50 border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/logo.png" alt="Логотип Антоновской СОШ" class="logo">
+                    <h1 class="text-2xl font-bold text-dark">Антоновская СОШ</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-dark hover:text-accent font-medium">Главная</a>
+                    <a href="info.html" class="text-dark hover:text-accent font-medium">О школе</a>
+                    <a href="contact.html" class="text-dark hover:text-accent font-medium">Контакты</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 flex-grow">
+        <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+            Объявления
+        </h2>
+        <div id="announcements-list" class="space-y-6">
+            <!-- Announcements will be inserted here by JavaScript -->
+        </div>
+        <div id="error-message" class="hidden text-center text-secondary text-lg">
+            Ошибка загрузки объявлений. Проверьте подключение к интернету и попробуйте снова.
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 z-50">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-around">
+                <a href="index.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-sm text-dark">Главная</span>
+                </a>
+                <a href="announcements.html" class="nav-item active flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-bullhorn text-lg"></i>
+                    <span class="text-sm text-dark">Объявления</span>
+                </a>
+                <a href="info.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-info-circle text-lg"></i>
+                    <span class="text-sm text-dark">О школе</span>
+                </a>
+                <a href="contact.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-address-book text-lg"></i>
+                    <span class="text-sm text-dark">Контакты</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer-bg backdrop-blur-sm py-12 border-t mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4 text-dark">Антоновская СОШ</h5>
+                    <p class="text-secondary">Единый портал школьных сервисов для учеников, учителей и родителей.</p>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Категории</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-accent">Образование</a></li>
+                        <li><a href="#" class="hover:text-accent">Соцсети</a></li>
+                        <li><a href="#" class="hover:text-accent">Госуслуги</a></li>
+                        <li><a href="#" class="hover:text-accent">Полезные ссылки</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Контакты</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li>Адрес: Нюрбинский район, с.Антоновка, ул.Чусовского 6</li>
+                        <li>Телефон: +7 (41134) 3-36-11</li>
+                        <li>Email: antonovkaschool@mail.ru</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Социальные сети</h6>
+                    <div class="flex space-x-4">
+                        <a href="https://vk.com/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/vk.png" alt="VK" class="w-6 h-6">
+                        </a>
+                        <a href="https://t.me/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/telegram.png" alt="Telegram" class="w-6 h-6">
+                        </a>
+                        <a href="https://youtube.com/@antonovkaschool" class="text-secondary hover:text-red-600">
+                            <img src="images/youtube.png" alt="YouTube" class="w-6 h-6">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-8 pt-8 text-center text-secondary">
+                <p>&copy; 2025 Антоновская СОШ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'https://antonovkaschool.ru/api/get_announcements.php';
+        const announcementsList = document.getElementById('announcements-list');
+        const errorMessage = document.getElementById('error-message');
+
+        async function loadAnnouncements() {
+            try {
+                console.log('loadAnnouncements: Starting request to ' + API_URL);
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const json = await response.json();
+                console.log('loadAnnouncements: Success, response = ', json);
+
+                if (json.status === 'success') {
+                    const announcements = json.data;
+                    if (announcements.length === 0) {
+                        announcementsList.innerHTML = '<p class="text-center text-secondary text-lg">Объявлений пока нет.</p>';
+                    } else {
+                        announcementsList.innerHTML = announcements.map(announcement => {
+                            try {
+                                const iconTitle = `[${announcement.icon || ''}] ${announcement.title || 'Без заголовка'}`;
+                                const text = announcement.text || 'Нет содержания';
+                                const datetime = announcement.datetime || 'Не указана';
+                                return `
+                                    <div class="announcement-card rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all border p-6">
+                                        <h3 class="text-xl font-bold text-dark mb-2">${iconTitle}</h3>
+                                        <p class="text-secondary text-sm mb-4">${text}</p>
+                                        <p class="text-secondary text-sm">Дата: ${datetime}</p>
+                                    </div>
+                                `;
+                            } catch (error) {
+                                console.error('loadAnnouncements: Error parsing announcement', error);
+                                return '';
+                            }
+                        }).filter(card => card).join('');
+                    }
+                } else {
+                    throw new Error(json.message || 'Ошибка сервера');
+                }
+            } catch (error) {
+                console.error('loadAnnouncements: Error, message = ', error.message);
+                announcementsList.innerHTML = '';
+                errorMessage.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAnnouncements);
+    </script>
+</body>
+</html>

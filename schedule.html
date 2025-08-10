@@ -1,0 +1,261 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Расписание - Антоновская СОШ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #A8E4A0 0%, #D8E8D8 50%, #F5F6F5 100%);
+            color: #333333;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .app-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            background-color: #ffffff;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+        }
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .app-icon:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        .app-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        .app-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #2f855a, #4fb3bf);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(47, 133, 90, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(47, 133, 90, 0.6);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .header-bg {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .footer-bg {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .text-dark {
+            color: #333333;
+        }
+        .text-secondary {
+            color: #4b5563;
+        }
+        .text-accent {
+            color: #2f855a;
+        }
+        .click-scale {
+            transition: transform 0.1s ease;
+        }
+        .click-scale:active {
+            transform: scale(0.9);
+        }
+        .nav-item.active {
+            background-color: #2f855a;
+            color: #ffffff;
+        }
+        .nav-item:hover:not(.active) {
+            background-color: #e6fffa;
+            color: #2f855a;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header-bg backdrop-blur-md sticky top-0 z-50 border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/logo.png" alt="Логотип Антоновской СОШ" class="logo">
+                    <h1 class="text-2xl font-bold text-dark">Антоновская СОШ</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="index.html" class="text-dark hover:text-accent font-medium">Главная</a>
+                    <a href="info.html" class="text-dark hover:text-accent font-medium">О школе</a>
+                    <a href="contact.html" class="text-dark hover:text-accent font-medium">Контакты</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12 flex-grow">
+        <h2 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+            Расписание уроков
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+            <div class="app-card bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all border">
+                <div class="p-6 text-center">
+                    <div class="app-icon" style="background-color: #ffffff">
+                        <img src="images/nachalnie.png" alt="1–4 классы">
+                    </div>
+                    <h4 class="text-xl font-bold text-dark mb-2">1–4 классы</h4>
+                    <p class="text-secondary text-sm mb-6">Расписание уроков для начальных классов</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1WqeRM2IQtttznc-KmmY09SlKOEtMU6SDKkL3cjHq0XM/pubhtml?widget=true&headers=false" target="_blank" class="btn-primary text-white px-6 py-3 rounded-full font-medium transition-all inline-block">
+                        Перейти
+                    </a>
+                </div>
+            </div>
+            <div class="app-card bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all border">
+                <div class="p-6 text-center">
+                    <div class="app-icon" style="background-color: #ffffff">
+                        <img src="images/srednya.png" alt="5–11 классы">
+                    </div>
+                    <h4 class="text-xl font-bold text-dark mb-2">5–11 классы</h4>
+                    <p class="text-secondary text-sm mb-6">Расписание уроков для средних и старших классов</p>
+                    <a href="https://docs.google.com/spreadsheets/d/13XE9hpD8NEgAMmpETyj2NqjC_CwAQGPwrc-o1BXuEq4/pubhtml?widget=true&headers=false" target="_blank" class="btn-primary text-white px-6 py-3 rounded-full font-medium transition-all inline-block">
+                        Перейти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 z-50">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-around">
+                <a href="index.html" class="nav-item active flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-sm text-dark">Главная</span>
+                </a>
+                <a href="announcements.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-bullhorn text-lg"></i>
+                    <span class="text-sm text-dark">Объявления</span>
+                </a>
+                <a href="info.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-info-circle text-lg"></i>
+                    <span class="text-sm text-dark">О школе</span>
+                </a>
+                <a href="contact.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-address-book text-lg"></i>
+                    <span class="text-sm text-dark">Контакты</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer-bg backdrop-blur-sm py-12 border-t mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4 text-dark">Антоновская СОШ</h5>
+                    <p class="text-secondary">Единый портал школьных сервисов для учеников, учителей и родителей.</p>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Категории</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-accent">Образование</a></li>
+                        <li><a href="#" class="hover:text-accent">Соцсети</a></li>
+                        <li><a href="#" class="hover:text-accent">Госуслуги</a></li>
+                        <li><a href="#" class="hover:text-accent">Полезные ссылки</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Контакты</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li>Адрес: Нюрбинский район, с.Антоновка, ул.Чусовского 6</li>
+                        <li>Телефон: +7 (41134) 3-36-11</li>
+                        <li>Email: antonovkaschool@mail.ru</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Социальные сети</h6>
+                    <div class="flex space-x-4">
+                        <a href="https://vk.com/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/vk.png" alt="VK" class="w-6 h-6">
+                        </a>
+                        <a href="https://t.me/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/telegram.png" alt="Telegram" class="w-6 h-6">
+                        </a>
+                        <a href="https://youtube.com/@antonovkaschool" class="text-secondary hover:text-red-600">
+                            <img src="images/youtube.png" alt="YouTube" class="w-6 h-6">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-8 pt-8 text-center text-secondary">
+                <p>&copy; 2024 Антоновская СОШ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
