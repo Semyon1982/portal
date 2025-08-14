@@ -1,0 +1,389 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Радио - Антоновская СОШ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #A8E4A0 0%, #D8E8D8 50%, #F5F6F5 100%);
+            color: #333333;
+        }
+        .logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .radio-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        .radio-container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        .radio-image {
+            width: 96px;
+            height: 96px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin: 0 auto 16px;
+            background-color: #ffffff;
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .radio-image:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 16px 20px -4px rgba(0, 0, 0, 0.15);
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #2f855a, #4fb3bf);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(47, 133, 90, 0.4);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(47, 133, 90, 0.6);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .search-icon {
+            width: 16px;
+            height: 16px;
+            color: #4b5563;
+        }
+        .header-bg {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .footer-bg {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .text-dark {
+            color: #333333;
+        }
+        .text-secondary {
+            color: #4b5563;
+        }
+        .text-accent {
+            color: #2f855a;
+        }
+        .click-scale {
+            transition: transform 0.1s ease;
+        }
+        .click-scale:active {
+            transform: scale(0.9);
+        }
+        .nav-item.active {
+            background-color: #2f855a;
+            color: #ffffff;
+        }
+        .nav-item:hover:not(.active) {
+            background-color: #e6fffa;
+            color: #2f855a;
+        }
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%234b5563'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1.5em;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="header-bg backdrop-blur-md sticky top-0 z-50 border-b">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="images/logo.png" alt="Логотип Антоновской СОШ" class="logo">
+                    <h1 class="text-2xl font-bold text-dark">Антоновская СОШ</h1>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <nav class="flex space-x-6">
+                        <a href="index.html" class="text-dark hover:text-accent font-medium">Главная</a>
+                        <a href="info.html" class="text-dark hover:text-accent font-medium">О школе</a>
+                        <a href="contact.html" class="text-dark hover:text-accent font-medium">Контакты</a>
+                    </nav>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="relative hidden md:block">
+                        <svg class="search-icon absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Поиск сервисов..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent bg-white/80 text-dark placeholder-gray-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Search -->
+        <div class="md:hidden px-4 pb-4">
+            <div class="relative">
+                <svg class="search-icon absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" id="mobileSearch" placeholder="Поиск сервисов..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent bg-white/80 text-dark placeholder-gray-500">
+            </div>
+        </div>
+    </header>
+
+    <!-- Radio Section -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h3 class="text-3xl font-bold text-center mb-12 bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                Школьное радио
+            </h3>
+            <div class="radio-container">
+                <img id="radioImage" src="images/radio.png" alt="Радио" class="radio-image mx-auto">
+                <select id="stationSelect" class="w-full p-3 mb-4 border border-gray-300 rounded-full text-dark focus:outline-none focus:ring-2 focus:ring-accent bg-white/80">
+                    <option value="" selected>Выберите станцию</option>
+                    <option value="http://46.48.141.106:8001/stream|radio_niurba">Радио МБОУ АСОШ</option>
+                    <option value="http://37.139.33.202:8000/stream.mp3|sakhalyy_victoria">Сахалыы Виктория</option>
+                    <option value="https://icecast-saha.cdnvideo.ru/saha|tetim">Тэтим</option>
+                    <option value="http://eptop128.streamr.ru|europa_plus_top40">Европа+ Top40</option>
+                    <option value="https://ep256.hostingradio.ru:8052/europaplus256.mp3|europa_plus">Европа+</option>
+                    <option value="https://rusradio.hostingradio.ru/rusradio96.aacp|russkoe_radio">Русское Радио</option>
+                    <option value="https://hitfm.hostingradio.ru/hitfm96.aacp|hit_fm">Хит FM</option>
+                    <option value="https://radiorecord.hostingradio.ru/sd9096.aacp|superdiskoteka_90">Супердискотека 90-х - Радио Рекорд</option>
+                    <option value="https://retro80.hostingradio.ru:8025/retro80-128.mp3|retro_fm_80">Ретро FM 80-е</option>
+                </select>
+                <audio id="radioPlayer" controls class="w-full mb-4"></audio>
+                <p id="trackInfo" class="text-center text-sm text-secondary mb-4">Название трека: Не доступно</p>
+                <button id="playPauseBtn" class="btn-primary w-full py-3 rounded-full text-base flex items-center justify-center">
+                    <i class="fas fa-play mr-2"></i> Воспроизвести
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bottom Navigation -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 z-50">
+        <div class="container mx-auto px-4 py-2">
+            <div class="flex justify-around">
+                <a href="index.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-home text-lg"></i>
+                    <span class="text-sm text-dark">Главная</span>
+                </a>
+                <a href="announcements.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-bullhorn text-lg"></i>
+                    <span class="text-sm text-dark">Объявления</span>
+                </a>
+                <a href="info.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-info-circle text-lg"></i>
+                    <span class="text-sm text-dark">О школе</span>
+                </a>
+                <a href="contact.html" class="nav-item flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-address-book text-lg"></i>
+                    <span class="text-sm text-dark">Контакты</span>
+                </a>
+                <a href="radio.html" class="nav-item active flex flex-col items-center p-2 rounded-lg click-scale">
+                    <i class="fas fa-radio text-lg"></i>
+                    <span class="text-sm text-dark">Радио</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Footer -->
+    <footer class="footer-bg backdrop-blur-sm py-12 border-t mt-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h5 class="text-xl font-bold mb-4 text-dark">Антоновская СОШ</h5>
+                    <p class="text-secondary">Единый портал школьных сервисов для учеников, учителей и родителей.</p>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Категории</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li><a href="#" class="hover:text-accent">Образование</a></li>
+                        <li><a href="#" class="hover:text-accent">Соцсети</a></li>
+                        <li><a href="#" class="hover:text-accent">Госуслуги</a></li>
+                        <li><a href="#" class="hover:text-accent">Полезные ссылки</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Контакты</h6>
+                    <ul class="space-y-2 text-secondary">
+                        <li>Адрес: Нюрбинский район, с.Антоновка, ул.Чусовского 6</li>
+                        <li>Телефон: +7 (41134) 3-36-11</li>
+                        <li>Email: online.nyurba@mail.ru</li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="font-semibold mb-4 text-dark">Социальные сети</h6>
+                    <div class="flex space-x-4">
+                        <a href="https://vk.com/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/vk.png" alt="VK" class="w-6 h-6">
+                        </a>
+                        <a href="https://t.me/antonovkaschool" class="text-secondary hover:text-blue-600">
+                            <img src="images/telegram.png" alt="Telegram" class="w-6 h-6">
+                        </a>
+                        <a href="https://youtube.com/@antonovkaschool" class="text-secondary hover:text-red-600">
+                            <img src="images/youtube.png" alt="YouTube" class="w-6 h-6">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-300 mt-8 pt-8 text-center text-secondary">
+                <p>&copy; 2025 Антоновская СОШ. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Радиостанции
+        const stations = [
+            { name: "Радио МБОУ АСОШ", url: "http://46.48.141.106:8001/stream", logo: "images/radio_niurba.png" },
+            { name: "Сахалыы Виктория", url: "http://37.139.33.202:8000/stream.mp3", logo: "images/sakhalyy_victoria.png" },
+            { name: "Тэтим", url: "https://icecast-saha.cdnvideo.ru/saha", logo: "images/tetim.png" },
+            { name: "Европа+ Top40", url: "http://eptop128.streamr.ru", logo: "images/europa_plus_top40.png" },
+            { name: "Европа+", url: "https://ep256.hostingradio.ru:8052/europaplus256.mp3", logo: "images/europa_plus.png" },
+            { name: "Русское Радио", url: "https://rusradio.hostingradio.ru/rusradio96.aacp", logo: "images/russkoe_radio.png" },
+            { name: "Хит FM", url: "https://hitfm.hostingradio.ru/hitfm96.aacp", logo: "images/hit_fm.png" },
+            { name: "Супердискотека 90-х - Радио Рекорд", url: "https://radiorecord.hostingradio.ru/sd9096.aacp", logo: "images/superdiskoteka_90.png" },
+            { name: "Ретро FM 80-е", url: "https://retro80.hostingradio.ru:8025/retro80-128.mp3", logo: "images/retro_fm_80.png" }
+        ];
+
+        // DOM элементы
+        const stationSelect = document.getElementById('stationSelect');
+        const radioPlayer = document.getElementById('radioPlayer');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const radioImage = document.getElementById('radioImage');
+        const trackInfo = document.getElementById('trackInfo');
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            // Установка начального состояния
+            radioPlayer.src = '';
+            radioPlayer.pause();
+            playPauseBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Воспроизвести';
+            radioImage.src = 'images/radio.png';
+            trackInfo.textContent = 'Название трека: Не доступно';
+
+            // Обработчик выбора станции
+            stationSelect.addEventListener('change', () => {
+                const [url, logo] = stationSelect.value ? stationSelect.value.split('|') : ['', 'radio'];
+                if (url) {
+                    radioPlayer.src = url;
+                    radioPlayer.play().catch(e => {
+                        console.error('Ошибка воспроизведения:', e);
+                        trackInfo.textContent = 'Название трека: Ошибка воспроизведения';
+                    });
+                    radioImage.src = `images/${logo}.png`;
+                    trackInfo.textContent = 'Название трека: Не доступно';
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause mr-2"></i> Пауза';
+                } else {
+                    radioPlayer.src = '';
+                    radioPlayer.pause();
+                    radioImage.src = 'images/radio.png';
+                    trackInfo.textContent = 'Название трека: Не доступно';
+                    playPauseBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Воспроизвести';
+                }
+            });
+
+            // Обработчик кнопки воспроизведения/паузы
+            playPauseBtn.addEventListener('click', () => {
+                if (radioPlayer.paused && radioPlayer.src) {
+                    radioPlayer.play().catch(e => {
+                        console.error('Ошибка воспроизведения:', e);
+                        trackInfo.textContent = 'Название трека: Ошибка воспроизведения';
+                    });
+                    playPauseBtn.innerHTML = '<i class="fas fa-pause mr-2"></i> Пауза';
+                } else if (radioPlayer.src) {
+                    radioPlayer.pause();
+                    playPauseBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Воспроизвести';
+                }
+            });
+
+            // Обработчик ошибок плеера
+            radioPlayer.addEventListener('error', () => {
+                trackInfo.textContent = 'Название трека: Ошибка воспроизведения';
+                playPauseBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Воспроизвести';
+            });
+
+            // Обработчик поиска
+            const searchInput = document.getElementById('searchInput');
+            const mobileSearch = document.getElementById('mobileSearch');
+            const handleSearch = () => {
+                const term = searchInput.value.trim() || mobileSearch.value.trim();
+                if (term) {
+                    const matchedStation = stations.find(station => 
+                        station.name.toLowerCase().includes(term.toLowerCase())
+                    );
+                    if (matchedStation) {
+                        stationSelect.value = `${matchedStation.url}|${matchedStation.logo.split('/').pop().replace('.png', '')}`;
+                        radioPlayer.src = matchedStation.url;
+                        radioPlayer.play().catch(e => {
+                            console.error('Ошибка воспроизведения:', e);
+                            trackInfo.textContent = 'Название трека: Ошибка воспроизведения';
+                        });
+                        radioImage.src = matchedStation.logo;
+                        trackInfo.textContent = 'Название трека: Не доступно';
+                        playPauseBtn.innerHTML = '<i class="fas fa-pause mr-2"></i> Пауза';
+                    }
+                }
+            };
+            searchInput.addEventListener('input', handleSearch);
+            mobileSearch.addEventListener('input', handleSearch);
+        });
+    </script>
+</body>
+</html>
