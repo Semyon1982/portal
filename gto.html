@@ -123,6 +123,23 @@
             background-size: 1.5em;
         }
     </style>
+<!-- PWA Мета-теги -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="АСОШ Портал">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/portal/manifest.json">
+<link rel="apple-touch-icon" href="/portal/images/icon-192.png">
+<!-- Регистрация Service Worker -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/portal/sw.js')
+        .then(reg => console.log('Service Worker registered:', reg))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    });
+  }
+</script>
 </head>
 <body class="min-h-screen flex flex-col">
     <!-- Header -->
