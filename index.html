@@ -7,17 +7,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Оптимизированные стили для повышения производительности -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(45deg, #A8E4A0 0%, #D8E8D8 50%, #F5F6F5 100%);
             color: #333333;
+            overscroll-behavior: none; /* Предотвращает резкие подергивания при скролле */
         }
         .logo {
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .app-icon {
             width: 48px;
@@ -28,9 +29,7 @@
             justify-content: center;
             margin: 0 auto 12px;
             background-color: #ffffff;
-            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 3px 5px -1px rgba(0, 0, 0, 0.08);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            overflow: hidden;
+            transition: transform 0.1s ease; /* Упрощенная анимация */
         }
         .app-icon img {
             width: 100%;
@@ -38,8 +37,7 @@
             object-fit: cover;
         }
         .app-icon:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 16px 20px -4px rgba(0, 0, 0, 0.15), 0 8px 8px -4px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px); /* Уменьшенный эффект подъема */
         }
         @media (min-width: 768px) {
             .app-icon {
@@ -48,19 +46,15 @@
                 border-radius: 16px;
                 margin-bottom: 16px;
             }
-            .app-icon:hover {
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-            }
         }
         .category-btn {
             background-color: #ffffff;
             color: #333333;
-            transition: all 0.3s ease;
+            transition: background-color 0.2s ease, color 0.2s ease; /* Упрощенная анимация */
         }
         .category-btn.active {
             background-color: #2f855a;
             color: #ffffff;
-            transform: scale(1.05);
         }
         .category-btn:not(.active):hover {
             background-color: #e6fffa;
@@ -69,10 +63,10 @@
         .app-card {
             width: 160px;
             height: 256px;
-            transition: all 0.3s ease;
             border: 1px solid rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            transition: transform 0.1s ease; /* Упрощенная анимация */
         }
         @media (min-width: 768px) {
             .app-card {
@@ -81,22 +75,18 @@
             }
         }
         .app-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-            border-color: rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px); /* Уменьшенный эффект подъема */
         }
         .btn-primary {
             background: linear-gradient(45deg, #2f855a, #4fb3bf);
             color: #ffffff;
-            box-shadow: 0 4px 15px rgba(47, 133, 90, 0.4);
-            transition: all 0.3s ease;
+            transition: transform 0.1s ease; /* Упрощенная анимация */
         }
         .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(47, 133, 90, 0.6);
         }
         .btn-primary:active {
-            transform: translateY(0);
+            transform: scale(0.95);
         }
         .search-icon {
             width: 16px;
@@ -124,7 +114,7 @@
             transition: transform 0.1s ease;
         }
         .click-scale:active {
-            transform: scale(0.9);
+            transform: scale(0.95);
         }
         .nav-item.active {
             background-color: #2f855a;
@@ -135,34 +125,33 @@
             color: #2f855a;
         }
     </style>
-<!-- PWA Мета-теги -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="АСОШ Портал">
-<meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="/portal/manifest.json">
-<link rel="apple-touch-icon" href="/portal/images/icon-192.png">
-<!-- Регистрация Service Worker -->
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/portal/sw.js')
-        .then(reg => console.log('Service Worker registered:', reg))
-        .catch(err => console.error('Service Worker registration failed:', err));
-    });
-  }
-</script>
+    <!-- PWA Мета-теги -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="АСОШ Портал">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="/portal/manifest.json">
+    <link rel="apple-touch-icon" href="/portal/images/icon-192.png">
+    <!-- Регистрация Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/portal/sw.js')
+            .then(reg => console.log('Service Worker registered:', reg))
+            .catch(err => console.error('Service Worker registration failed:', err));
+        });
+      }
+    </script>
 </head>
 <body class="min-h-screen flex flex-col">
     <!-- Header -->
-    <header class="header-bg backdrop-blur-md sticky top-0 z-50 border-b">
+    <header class="header-bg sticky top-0 z-50 border-b">
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
                     <img src="images/logo.png" alt="Логотип Антоновской СОШ" class="logo">
                     <h1 class="text-2xl font-bold text-dark">Антоновская СОШ</h1>
                 </div>
-
                 <div class="hidden md:flex items-center space-x-6">
                     <nav class="flex space-x-6">
                         <a href="index.html" class="text-dark hover:text-accent font-medium">Главная</a>
@@ -170,7 +159,6 @@
                         <a href="contact.html" class="text-dark hover:text-accent font-medium">Контакты</a>
                     </nav>
                 </div>
-
                 <div class="flex items-center space-x-4">
                     <div class="relative hidden md:block">
                         <svg class="search-icon absolute left-3 top-1/2 transform -translate-y-1/2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -181,7 +169,6 @@
                 </div>
             </div>
         </div>
-
         <!-- Mobile Search -->
         <div class="md:hidden px-4 pb-4">
             <div class="relative">
@@ -247,7 +234,7 @@
     </section>
 
     <!-- Bottom Navigation -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-sm border-t border-gray-200 z-50">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 border-t border-gray-200 z-50">
         <div class="container mx-auto px-4 py-2">
             <div class="flex justify-around">
                 <a href="index.html" class="nav-item active flex flex-col items-center p-2 rounded-lg click-scale">
@@ -271,7 +258,7 @@
     </nav>
 
     <!-- Footer -->
-    <footer class="footer-bg backdrop-blur-sm py-12 border-t mt-16">
+    <footer class="footer-bg py-12 border-t mt-16">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div>
@@ -531,7 +518,7 @@
             }
 
             appsGrid.innerHTML = filteredApps.map(app => `
-                <div class="app-card bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all border flex flex-col justify-between">
+                <div class="app-card rounded-2xl overflow-hidden border flex flex-col justify-between">
                     <div class="p-4 md:p-6 text-center flex flex-col items-center">
                         <div class="app-icon" style="background-color: ${app.iconColor}">
                             <img src="${app.icon}" alt="${app.name}">
@@ -540,7 +527,7 @@
                         <p class="text-xs md:text-sm text-secondary mb-2 md:mb-4 line-clamp-2">${app.description}</p>
                     </div>
                     <div class="p-4 md:p-6 pt-0 md:pt-0 text-center">
-                        <a href="${app.url}" target="_blank" class="btn-primary text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm md:text-base transition-all inline-block mt-2 md:mt-4">
+                        <a href="${app.url}" target="_blank" class="btn-primary text-white px-4 py-2 md:px-6 md:py-3 rounded-full text-sm md:text-base inline-block mt-2 md:mt-4">
                             ${app.buttonText}
                         </a>
                     </div>
@@ -590,6 +577,4 @@
         });
     </script>
 </body>
-
 </html>
-
