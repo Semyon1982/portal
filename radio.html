@@ -265,15 +265,15 @@
     <script>
         // Радиостанции
         const stations = [
-            { name: "Радио МБОУ АСОШ", url: "http://46.48.141.106:8001/stream", logo: "images/radio_niurba.png" },
-            { name: "Сахалыы Виктория", url: "http://37.139.33.202:8000/stream.mp3", logo: "images/sakhalyy_victoria.png" },
+            { name: "Радио МБОУ АСОШ", url: "http://46.48.141.106:8001/stream", logo: "images/logo.png" },
+            { name: "Сахалыы Виктория", url: "http://37.139.33.202:8000/stream.mp3", logo: "images/sakhalyy_victoria.jpg" },
             { name: "Тэтим", url: "https://icecast-saha.cdnvideo.ru/saha", logo: "images/tetim.png" },
-            { name: "Европа+ Top40", url: "http://eptop128.streamr.ru", logo: "images/europa_plus_top40.png" },
+            { name: "Европа+ Top40", url: "http://eptop128.streamr.ru", logo: "images/europa_plus_top40.jpeg" },
             { name: "Европа+", url: "https://ep256.hostingradio.ru:8052/europaplus256.mp3", logo: "images/europa_plus.png" },
-            { name: "Русское Радио", url: "https://rusradio.hostingradio.ru/rusradio96.aacp", logo: "images/russkoe_radio.png" },
-            { name: "Хит FM", url: "https://hitfm.hostingradio.ru/hitfm96.aacp", logo: "images/hit_fm.png" },
-            { name: "Супердискотека 90-х - Радио Рекорд", url: "https://radiorecord.hostingradio.ru/sd9096.aacp", logo: "images/superdiskoteka_90.png" },
-            { name: "Ретро FM 80-е", url: "https://retro80.hostingradio.ru:8025/retro80-128.mp3", logo: "images/retro_fm_80.png" }
+            { name: "Русское Радио", url: "https://rusradio.hostingradio.ru/rusradio96.aacp", logo: "images/russkoe_radio.jpg" },
+            { name: "Хит FM", url: "https://hitfm.hostingradio.ru/hitfm96.aacp", logo: "images/hit_fm.jpeg" },
+            { name: "Супердискотека 90-х - Радио Рекорд", url: "https://radiorecord.hostingradio.ru/sd9096.aacp", logo: "images/superdiskoteka_90.jpg" },
+            { name: "Ретро FM 80-е", url: "https://retro80.hostingradio.ru:8025/retro80-128.mp3", logo: "images/retro_fm_80.jpg" }
         ];
 
         // DOM элементы
@@ -307,7 +307,7 @@
                 } else {
                     radioPlayer.src = '';
                     radioPlayer.pause();
-                    radioImage.src = 'images/radio.png';
+                    radioImage.src = 'images/radio.jpg';
                     trackInfo.textContent = 'Название трека: Не доступно';
                     playPauseBtn.innerHTML = '<i class="fas fa-play mr-2"></i> Воспроизвести';
                 }
